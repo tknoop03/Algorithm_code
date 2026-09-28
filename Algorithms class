@@ -1,0 +1,73 @@
+# Tyler Knoop 
+# Sean Sanpietro 
+# Patrick Williams 
+
+
+
+
+#Sort Based Algorithm --> finds the kth greatest number by sorting all the numbers from greatest to smallest, then taking the position of k. 
+def k_greatest(numbers, k):
+    numbers.sort(reverse=True)
+    return numbers[k - 1]
+
+
+numbers = [12, 5, 19, 3, 8, 15, 10]
+k = 5
+
+answer = k_greatest(numbers, k)
+print("The kth greatest number is:", answer)
+
+
+#Median_of_Median Algorithm --> Divides the data set into groups, then finds the median of each group, then find the median of those medians which is the pivot. Then seperates the 
+# original list from greatest to smallest and insterst the median there. Lastly find kth number in list. 
+def median_of_medians (numbers,k):
+    if len(numbers) <= 5:
+        return sorted (numbers)[k-1]
+        
+    groups = [numbers[i:i+5] for i in range(0,len(numbers),5)]
+        
+    medians=[sorted(group)[len(group)//2] for group in groups]
+             
+    pivot = median_of_medians(medians,(len(medians)+1)//2)
+    
+    greater = [x for x in numbers if x > pivot]
+    equal = [x for x in numbers if x == pivot]
+    smaller = [x for x in numbers if x < pivot]
+    
+    if k<=len(smaller):
+        return median_of_medians(smaller,k)
+    elif k<=len(smaller) + len(equal):
+        return pivot
+    return median_of_medians (
+        smaller,
+        k-len(greater)-len(equal)
+        )
+
+numbers = [12,5,19,3,8,15,10,21,7]
+k = 5
+
+print(median_of_medians(numbers, k))
+
+
+#iterative_max algorithm --> Goes through each number and keeps track of each one to see if it is larger 
+def findmax(list):
+    max = list[0]
+    
+    for x in list:
+        if x > max:
+            max = x
+            
+    return max
+
+list = [12,5,19,3,8,15,10]
+print(findmax(list))
+
+
+
+
+# The run time of each varies when the n or run time is continuously changing. As n increased, the sort-based and iterative-max algorithms had very similar run times,
+# while the median of median was the consensus slower run time. Although the median algorithm has an O(n) worst-case run time, the additional steps added to the code
+# makes it the longer run time. The iterative-max becomes slightly faster with a longer run time. 
+# The most efficient would be the iterative-max because it does the least amount of work no matter the size of n and check seach amount once.
+# Sort-based just sorts th enetire list everytime n gets changed and insterst the new n wherever it occurs in the list from greatest to least. 
+# The median or medians is the slowest because it has to go through every single n, and find new patterns, and find the changes. 
